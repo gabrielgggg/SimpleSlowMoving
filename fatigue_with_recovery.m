@@ -2,7 +2,7 @@ clear;
 close all;
 
 r = 0.04;
-delta = 1.0 / 6.0; % 1.0 / 20.0;
+delta = 1.0 / 6.0;
 kappa = r + delta;
 bBar = 0.35;
 
