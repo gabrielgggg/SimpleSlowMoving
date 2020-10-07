@@ -4,4 +4,4 @@ Simple slow-moving debt crisis model like (Gosh et al. 2013 EJ) or (Lorenzoni We
 
 * "fiscal fatigue" primary surplus fiscal rule
 * endogenous default and yields
-* constant recovery rate (but subject to upper cap)
+* constant recovery rate, with upper limit on recovery level
