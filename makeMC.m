@@ -4,9 +4,12 @@ function [ X, Pi ] = makeMC(yBar, rho, sgma, n, trimTails)
 % using AR(1) with mean yBar, autocorrelation rho, and s.d. of innovation
 % sgma, with n points of support.
 %
+% trimTrails = true => discretize truncated Normal
+%            = false => assign mass in tails to end points of grid
+%
 
 % X = equally spaced over an interval
-% [ yBar - 2 s.d, yBar + 2 s.d. ]
+% [ yBar - 3 s.d, yBar + 3 s.d. ]
 X = linspace( yBar - 3.0 * sgma / sqrt(1 - rho^2), ...
     yBar + 3.0 * sgma / sqrt(1 - rho^2), n);
 
@@ -21,6 +24,7 @@ for stYesterday = 1:n
             normcdf((X(stToday) + X(stToday+1))/2, condE, sgma) ...
             - normcdf((X(stToday-1) + X(stToday))/2, condE, sgma);
     end
+
     if trimTails
         rightOfFirst = (X(1) + X(2))/2;
         shiftOfFirst = rightOfFirst - X(1);
@@ -36,9 +40,7 @@ for stYesterday = 1:n
         
         Pi(stYesterday, :) = Pi(stYesterday, :) ./ sum(Pi(stYesterday, :));
     else
-        % Left tail...
         Pi(stYesterday, 1) = normcdf((X(1) + X(2))/2, condE, sgma);
-        % Right tail...
         Pi(stYesterday, n) = 1 - normcdf((X(n-1) + X(n))/2, condE, sgma);
     end
 end

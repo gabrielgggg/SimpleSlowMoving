@@ -2,7 +2,7 @@ clear;
 close all;
 
 r = 0.04;
-delta = 1.0 / 6.0; % 1.0 / 20.0;
+delta = 1.0 / 6.0;
 kappa = r + delta;
 bBar = 0.35;
 tau0 = r * bBar;
@@ -16,7 +16,6 @@ qMin = 0.3;
 bSz = 501;
 zSz = 35;
 
-% b = linspace(-0.25, 0.75, bSz);
 b = linspace(-0.5, 2.0, bSz);
 [z, zPi] = makeMC(0.0, 0.95, 0.0075, zSz, true);
 
@@ -35,9 +34,9 @@ while err > errTol && iter <= maxIter
   for zIx = 1:zSz
     for bIx = 1:bSz
       bHere = b(bIx);
-      laff = q(zIx, :) .* (b - (1.0 - delta) * bHere); %#ok<*PFBNS>
+      laff = q(zIx, :) .* (b - (1.0 - delta) * bHere);
       if iter > 30
-        laff(q(zIx, :) < qMin) = -1000; % "underwriting standards"
+        laff(q(zIx, :) < qMin) = -1000;
       end
       thold = kappa * bHere - min(maxPS, tau0 + tau1 * (bHere - bBar)) - z(zIx);
       if max(laff) < thold
@@ -105,7 +104,6 @@ end
 
 figure;
 subplot(1, 2, 1); plot(b, bPr(1:5:end, :)); hold on; plot(b, b, 'k--', 'LineWidth', 2); title('b''');
-% subplot(1, 3, 2); plot(b, d(1:3:end, :)); title('d');
 qb = q .* repmat(b, [zSz, 1]);
 subplot(1, 2, 2); plot(b, qb(1:5:end, :)); title('q b');
 
@@ -120,7 +118,7 @@ for tIx = 1:T-1
   bHere = simB(tIx);
   zHere = simZ(tIx);
   zIx = simZix(tIx);
-  laff = q(zIx, :) .* (b - (1.0 - delta) * bHere); %#ok<*PFBNS>
+  laff = q(zIx, :) .* (b - (1.0 - delta) * bHere);
   laff(q(zIx, :) < qMin) = -1000;
   thold = kappa * bHere - min(maxPS, tau0 + tau1 * (bHere - bBar)) - zHere;
   if max(laff) < thold
@@ -159,3 +157,4 @@ subplot(2, 2, 1); histogram(simZ, zSz); title('z');
 subplot(2, 2, 2); histogram(simB, 50); title('B');
 subplot(2, 2, 3); histogram(simD, 2, 'Normalization', 'probability'); title('Default');
 subplot(2, 2, 4); histogram(simSp, 80); title('Spread');
+
